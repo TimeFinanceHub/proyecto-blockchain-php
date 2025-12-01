@@ -1,0 +1,80 @@
+/* --- Keyframe Animations --- */
+
+/* Fade in and slide up */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Fade out and slide down */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
+
+/* Pulse effect for mining */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(24, 119, 242, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(24, 119, 242, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(24, 119, 242, 0);
+    }
+}
+
+/* --- Animation Classes --- */
+
+/* Class to apply fade-in animation */
+.fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Class to apply fade-out animation */
+.fade-out {
+    animation: fadeOut 0.5s ease-in forwards;
+}
+
+/* Class for the mining button */
+.is-mining {
+    animation: pulse 1.5s infinite;
+}
+
+/* --- Notification Styles --- */
+.notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 24px;
+    background-color: #28a745;
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1001;
+    opacity: 0;
+    transition: opacity 0.5s, transform 0.5s;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translate(-50%, -10px);
+}
+
+.notification.error {
+    background-color: #dc3545;
+}

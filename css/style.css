@@ -1,0 +1,350 @@
+/* General Body Styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Container for Login/Register Forms */
+.container {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #1c1e21;
+    margin-bottom: 1.5rem;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #606770;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #dddfe2;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #1877f2;
+    box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+}
+
+button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #1877f2;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #166fe5;
+}
+
+p {
+    text-align: center;
+    margin-top: 1rem;
+    color: #606770;
+}
+
+a {
+    color: #1877f2;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Dashboard Styles */
+.dashboard-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-container header {
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #dddfe2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboard-container nav a {
+    margin-left: 1.5rem;
+    font-weight: 600;
+}
+
+.dashboard-container main {
+    padding: 2rem;
+}
+
+.dashboard-container section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border: 1px solid #dddfe2;
+    border-radius: 6px;
+}
+
+/* Blockchain Specific Styles */
+#chain-container {
+    margin-top: 1.5rem;
+}
+
+.block {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    word-wrap: break-word;
+}
+
+.block-header {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #1877f2;
+}
+
+.hash {
+    font-family: monospace;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.mine-form {
+    margin-top: 1rem;
+}
+
+.mine-form h3 {
+    margin-top: 0;
+}
+
+.mine-form textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 0.5rem;
+    border: 1px solid #dddfe2;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* YouTube Gallery Styles */
+.youtube-form {
+    display: flex;
+    margin-bottom: 1.5rem;
+}
+
+.youtube-form input {
+    flex-grow: 1;
+    padding: 0.75rem;
+    border: 1px solid #dddfe2;
+    border-radius: 6px 0 0 6px;
+    font-size: 1rem;
+}
+
+.youtube-form button {
+    width: auto;
+    border-radius: 0 6px 6px 0;
+}
+
+#video-gallery-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 1rem;
+}
+
+.video-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.video-wrapper iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
+}
+
+/* Style for the new delete video button */
+.delete-video-btn {
+    width: 100%;
+    background-color: #fa3e3e;
+    color: white;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 0; /* Full width button inside the wrapper */
+    transition: background-color 0.3s;
+}
+
+.delete-video-btn:hover {
+    background-color: #e03030;
+}
+
+/* To-Do List Styles */
+.todo-form {
+    display: flex;
+    margin-bottom: 1.5rem;
+}
+
+.todo-form input {
+    flex-grow: 1;
+    padding: 0.75rem;
+    border: 1px solid #dddfe2;
+    border-radius: 6px 0 0 6px;
+    font-size: 1rem;
+}
+
+.todo-form button {
+    width: auto;
+    border-radius: 0 6px 6px 0;
+}
+
+#task-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#task-list li {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+#task-list li:last-child {
+    border-bottom: none;
+}
+
+#task-list li.completed span {
+    text-decoration: line-through;
+    color: #999;
+}
+
+#task-list input[type="checkbox"] {
+    margin-right: 1rem;
+    width: 18px;
+    height: 18px;
+}
+
+#task-list span {
+    flex-grow: 1;
+}
+
+#task-list .delete-btn {
+    background-color: #fa3e3e;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+#task-list .delete-btn:hover {
+    background-color: #e03030;
+}
+
+/* Responsive adjustments for small screens */
+@media (max-width: 320px) {
+    body {
+        padding: 0;
+        margin: 0;
+        border: none;
+    }
+
+    .dashboard-container {
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
+        border: none;
+    }
+
+    .dashboard-container header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem;
+    }
+
+    .dashboard-container nav {
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .dashboard-container nav a {
+        margin: 0.5rem 0;
+        padding: 0.5rem;
+        background-color: #f0f2f5;
+        border-radius: 4px;
+        text-align: center;
+    }
+
+    .dashboard-container main {
+        padding: 1rem;
+    }
+    
+    .dashboard-container section {
+        padding: 1rem;
+    }
+
+    .youtube-form, .todo-form {
+        flex-direction: column;
+    }
+
+    .youtube-form input, .todo-form input {
+        border-radius: 6px;
+        margin-bottom: 0.5rem;
+    }
+
+    .youtube-form button, .todo-form button {
+        width: 100%;
+        border-radius: 6px;
+    }
+}
+

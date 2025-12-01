@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía: Configurar Servidor de Correo Local para PHP mail() en Zorin OS</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        h1, h2, h3, h4 {
+            color: #1c1e21;
+        }
+        h1 {
+            border-bottom: 2px solid #dddfe2;
+            padding-bottom: 10px;
+        }
+        h2 {
+            border-bottom: 1px solid #dddfe2;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+        }
+        .file-path {
+            font-weight: bold;
+            color: #1877f2;
+            background-color: #e7f3ff;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .code-comment {
+            color: #8b949e;
+            font-style: italic;
+        }
+        .important {
+            color: #d73a49;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .note {
+            background-color: #e6f7ff;
+            border-left: 5px solid #2196f3;
+            padding: 10px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="documentacion.html">Volver a la Documentación Principal</a></li>
+            </ul>
+        </nav>
+        <h1 id="top">Guía: Configurar Servidor de Correo Local para PHP mail() en Zorin OS 17.3 Pro</h1>
+        
+        <p>Esta guía te mostrará cómo configurar un Agente de Transferencia de Correo (MTA) en tu Zorin OS 17.3 Pro para que PHP pueda utilizar la función <code>mail()</code> y enviar correos electrónicos, retransmitiendo a través del servidor SMTP de Gmail. Esto es esencial para probar funcionalidades como la verificación de correo electrónico en tu aplicación local.</p>
+
+        <div class="note">
+            <p><span class="important">Advertencia:</span> Esta configuración es para entornos de desarrollo local y pruebas. No es adecuada para un servidor de correo en producción. Los correos enviados pueden terminar en la carpeta de spam del destinatario.</p>
+        </div>
+
+        <section id="paso1">
+            <h2>Paso 1: Generar una Contraseña de Aplicación de Google</h2>
+            <p>Si utilizas una cuenta de Gmail con la autenticación de dos factores (2FA) activada (lo cual es muy recomendable), necesitarás generar una "Contraseña de Aplicación" para que Postfix pueda autenticarse con el servidor SMTP de Gmail.</p>
+            <ol>
+                <li>Ve a tu <a href="https://myaccount.google.com/security" target="_blank">Cuenta de Google</a>.</li>
+                <li>En el menú de navegación izquierdo, haz clic en <span class="file-path">Seguridad</span>.</li>
+                <li>En la sección "Cómo inicias sesión en Google", haz clic en <span class="file-path">Contraseñas de Aplicación</span>. Es posible que tengas que iniciar sesión de nuevo.</li>
+                <li>Si no ves esta opción, asegúrate de que la verificación en dos pasos esté activada.</li>
+                <li>En la parte inferior, en "Seleccionar aplicación" y "Seleccionar dispositivo", elige <span class="file-path">Correo</span> y <span class="file-path">Otro (nombre personalizado)</span> respectivamente. Dale un nombre como "Postfix Zorin".</li>
+                <li>Haz clic en <span class="file-path">Generar</span>.</li>
+                <li>Se te proporcionará una contraseña de 16 caracteres (por ejemplo, <code>abcd efgh ijkl mnop</code>). <span class="important">Copia esta contraseña</span>; la necesitarás más adelante y solo se mostrará una vez.</li>
+            </ol>
+        </section>
+
+        <section id="paso2">
+            <h2>Paso 2: Instalar y Configurar Postfix</h2>
+            <p>Postfix es un MTA popular y fácil de configurar. Lo usaremos para reenviar correos a través de Gmail.</p>
+            <ol>
+                <li><p>Abre una terminal (<code>Ctrl + Alt + T</code>) e instala Postfix y sus dependencias necesarias:</p>
+<pre><code>sudo apt update
+sudo apt install postfix mailutils libsasl2-2 ca-certificates libsasl2-modules</code></pre>
+                </li>
+                <li><p>Durante la instalación de Postfix, se te harán algunas preguntas de configuración. Selecciona las siguientes opciones:</p>
+                    <ul>
+                        <li><span class="file-path">General type of mail configuration:</span> <span class="important">Internet Site</span></li>
+                        <li><span class="file-path">System mail name:</span> Tu dominio (ej. <span class="important">ejemplo.com</span>, o simplemente tu nombre de host si no tienes uno).</li>
+                        <li><span class="file-path">Root and postmaster mail recipient:</span> Deja en blanco o tu usuario de sistema.</li>
+                        <li><span class="file-path">Other destinations to accept mail for:</span> <span class="important">Deja como está (vacío).</span></li>
+                        <li><span class="file-path">Force synchronous updates on mail queue?</span> <span class="important">No</span></li>
+                        <li><span class="file-path">Local networks:</span> <span class="important">Deja como está.</span></li>
+                        <li><span class="file-path">Mailbox size limit (bytes):</span> <span class="important">0</span> (ilimitado)</li>
+                        <li><span class="file-path">Local address extension character:</span> <span class="important">+</span></li>
+                        <li><span class="file-path">Internet protocols to use:</span> <span class="important">all</span> (o ipv4 si estás seguro de que solo usarás IPv4)</li>
+                    </ul>
+                </li>
+                <li><p>Edita el archivo de configuración principal de Postfix:</p>
+<pre><code>sudo nano /etc/postfix/main.cf</code></pre>
+                </li>
+                <li><p>Añade o modifica las siguientes líneas al final del archivo. Reemplaza <span class="important"><code>tu_email@gmail.com</code></span> con tu dirección de Gmail y <span class="important"><code>your_domain.com</code></span> con el nombre de tu sistema o dominio si es diferente:</p>
+<pre><code># Configuración para usar Gmail como relay SMTP
+relayhost = [smtp.gmail.com]:587
+smtp_use_tls = yes
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_sasl_security_options = noanonymous
+smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
+smtp_generic_maps = hash:/etc/postfix/generic</code></pre>
+                </li>
+                <li><p>Guarda y cierra el archivo (<code>Ctrl + O</code>, <code>Enter</code>, <code>Ctrl + X</code>).</p></li>
+            </ol>
+        </section>
+
+        <section id="paso3">
+            <h2>Paso 3: Configurar Credenciales de Gmail</h2>
+            <p>Ahora crearemos el archivo que contendrá tu dirección de Gmail y la contraseña de aplicación generada en el Paso 1.</p>
+            <ol>
+                <li><p>Crea y edita el archivo de credenciales:</p>
+<pre><code>sudo nano /etc/postfix/sasl_passwd</code></pre>
+                </li>
+                <li><p>Añade la siguiente línea, reemplazando <span class="important"><code>tu_email@gmail.com</code></span> y <span class="important"><code>TU_CONTRASEÑA_DE_APLICACION_DE_GMAIL</code></span>:</p>
+<pre><code>[smtp.gmail.com]:587    tu_email@gmail.com:TU_CONTRASEÑA_DE_APLICACION_DE_GMAIL</code></pre>
+                </li>
+                <li><p>Guarda y cierra el archivo.</p></li>
+                <li><p>Crea el archivo `generic` que mapeará tu usuario local a tu dirección de Gmail para los correos salientes:</p>
+<pre><code>sudo nano /etc/postfix/generic</code></pre>
+                </li>
+                <li><p>Añade la siguiente línea, reemplazando <span class="important"><code>tu_usuario_local</code></span> (tu nombre de usuario en Zorin OS) y <span class="important"><code>tu_email@gmail.com</code></span>:</p>
+<pre><code>tu_usuario_local    tu_email@gmail.com</code></pre>
+                </li>
+                <li><p>Guarda y cierra el archivo.</p></li>
+                <li><p>Establece permisos correctos para el archivo de credenciales y crea la base de datos de Postfix:</p>
+<pre><code>sudo chmod 600 /etc/postfix/sasl_passwd
+sudo postmap /etc/postfix/sasl_passwd
+sudo postmap /etc/postfix/generic</code></pre>
+                </li>
+            </ol>
+        </section>
+
+        <section id="paso4">
+            <h2>Paso 4: Configurar PHP (php.ini)</h2>
+            <p>Necesitamos indicarle a PHP que utilice Postfix para enviar correos.</p>
+            <ol>
+                <li><p>Localiza tu archivo <code>php.ini</code>. Puede variar dependiendo de tu instalación de PHP (ej. Apache, Nginx con PHP-FPM). Una forma común de encontrarlo es crear un archivo <code>info.php</code> con <code>&lt;?php phpinfo(); ?&gt;</code> y buscar "Loaded Configuration File".</p>
+                    <p>Las ubicaciones comunes incluyen:</p>
+                    <ul>
+                        <li><span class="file-path">/etc/php/8.x/apache2/php.ini</span> (para Apache)</li>
+                        <li><span class="file-path">/etc/php/8.x/fpm/php.ini</span> (para Nginx con PHP-FPM)</li>
+                        <li><span class="file-path">/etc/php/8.x/cli/php.ini</span> (para scripts de línea de comandos, no afecta al servidor web)</li>
+                    </ul>
+                </li>
+                <li><p>Edita el <code>php.ini</code> correspondiente a tu servidor web (ej. Apache2 o FPM):</p>
+<pre><code>sudo nano /etc/php/8.x/apache2/php.ini   # O la ruta correcta</code></pre>
+                </li>
+                <li><p>Busca la sección <code>[mail function]</code> y asegúrate de que la línea <code>sendmail_path</code> apunte a la ruta correcta de Postfix. Descomenta la línea si está comentada (quitando el `;` al inicio):</p>
+<pre><code>sendmail_path = /usr/sbin/sendmail -t -i</code></pre>
+                </li>
+                <li><p>Guarda y cierra el archivo.</p></li>
+            </ol>
+        </section>
+
+        <section id="paso5">
+            <h2>Paso 5: Reiniciar Servicios</h2>
+            <p>Para que los cambios surtan efecto, debes reiniciar Postfix y tu servidor web (Apache o PHP-FPM si usas Nginx).</p>
+            <ol>
+                <li><p>Reinicia Postfix:</p>
+<pre><code>sudo systemctl restart postfix</code></pre>
+                </li>
+                <li><p>Reinicia tu servidor web:</p>
+                    <ul>
+                        <li>Para Apache:
+<pre><code>sudo systemctl restart apache2</code></pre>
+                        </li>
+                        <li>Para Nginx con PHP-FPM:
+<pre><code>sudo systemctl restart php8.x-fpm   # Reemplaza 8.x con tu versión de PHP (ej. php8.1-fpm)
+sudo systemctl restart nginx</code></pre>
+                        </li>
+                    </ul>
+                </li>
+            </ol>
+        </section>
+
+        <section id="paso6">
+            <h2>Paso 6: Probar la Configuración</h2>
+            <p>Finalmente, puedes probar si todo funciona creando un pequeño script PHP.</p>
+            <ol>
+                <li><p>Crea un archivo llamado <span class="file-path">test_mail.php</span> en tu directorio web (ej. <span class="file-path">/var/www/html/</span> o dentro de tu proyecto).</p>
+<pre><code>sudo nano /var/www/html/test_mail.php</code></pre>
+                </li>
+                <li><p>Añade el siguiente código, reemplazando <span class="important"><code>tu_email_destino@example.com</code></span> con una dirección de correo donde puedas verificar la recepción:</p>
+<pre><code>&lt;?php
+$to      = 'tu_email_destino@example.com';
+$subject = 'Prueba de PHP mail() desde Zorin OS';
+$message = 'Hola! Este es un correo de prueba enviado desde tu servidor local en Zorin OS usando PHP mail().';
+$headers = 'From: tu_email@gmail.com' . "\r\n" . 
+           'Reply-To: tu_email@gmail.com' . "\r\n" . 
+           'X-Mailer: PHP/' . phpversion();
+
+if(mail($to, $subject, $message, $headers)) {
+    echo "Correo enviado con éxito a $to";
+} else {
+    echo "Fallo al enviar el correo.";
+}
+?&gt;</code></pre>
+                </li>
+                <li><p>Guarda el archivo y ábrelo en tu navegador (ej. <code>http://localhost/test_mail.php</code>).</p></li>
+                <li><p>Verifica la bandeja de entrada (y la carpeta de spam) de la dirección de correo destino.</p></li>
+            </ol>
+        </section>
+
+        <p>¡Felicidades! Ahora tu Zorin OS debería ser capaz de enviar correos electrónicos usando la función <code>mail()</code> de PHP.</p>
+        <a href="documentacion.html" style="display: block; text-align: center; margin-top: 40px;">Volver a la Documentación Principal</a>
+    </div>
+</body>
+</html>
