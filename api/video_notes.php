@@ -99,13 +99,45 @@ try {
             if (!$id) {
                 $response['message'] = 'Note ID is required.';
                 http_response_code(400);
+                error_log("Video Notes API (DELETE): Note ID not provided.");
                 break;
             }
 
-            $stmt = $pdo->prepare("DELETE FROM video_notes WHERE id = :id AND user_id = :user_id");
-            $stmt->execute(['id' => $id, 'user_id' => $user_id]);
+            // --- Admin check for deletion ---
+            $current_user_id = $_SESSION['user_id'];
+            $admin_email = 'mostlyphpsoftware@gmail.com';
+            $is_admin = false;
 
-            if ($stmt->rowCount() > 0) {
+            try {
+                $stmt_user_email = $pdo->prepare("SELECT email FROM users WHERE id = :user_id");
+                $stmt_user_email->execute(['user_id' => $current_user_id]);
+                $user_email_data = $stmt_user_email->fetch(PDO::FETCH_ASSOC);
+                if ($user_email_data && $user_email_data['email'] === $admin_email) {
+                    $is_admin = true;
+                }
+            } catch (PDOException $e) {
+                error_log("Database error during admin check in video notes API: " . $e->getMessage());
+                $response['message'] = 'Internal server error during admin check.';
+                http_response_code(500);
+                break;
+            }
+            // --- End Admin check ---
+            error_log("Video Notes API (DELETE): Attempting to delete note ID: " . $id . " by user ID: " . $current_user_id . ", Is Admin: " . ($is_admin ? 'Yes' : 'No'));
+
+            if ($is_admin) {
+                // Admin can delete any note
+                $stmt = $pdo->prepare("DELETE FROM video_notes WHERE id = :id");
+                $stmt->execute(['id' => $id]);
+            } else {
+                // Regular user can only delete their own notes
+                $stmt = $pdo->prepare("DELETE FROM video_notes WHERE id = :id AND user_id = :user_id");
+                $stmt->execute(['id' => $id, 'user_id' => $user_id]);
+            }
+
+            $deleted_rows = $stmt->rowCount();
+            error_log("Video Notes API (DELETE): Query affected " . $deleted_rows . " rows.");
+
+            if ($deleted_rows > 0) {
                 $response = ['status' => 'success', 'message' => 'Note deleted successfully.'];
             } else {
                 $response['message'] = 'Note not found or you do not have permission to delete it.';

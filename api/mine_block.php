@@ -10,6 +10,13 @@ $response = ['status' => 'error', 'message' => 'An error occurred.'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
 
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        $response['message'] = 'Invalid JSON input.';
+        http_response_code(400); // Bad Request
+        echo json_encode($response);
+        exit();
+    }
+
     if (!isset($data['data'])) {
         $response['message'] = 'Data for the new block is required.';
     } else {

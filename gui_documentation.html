@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Uso de la Interfaz Gráfica</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* General Body Styles - Inherited from style.css */
+        body {
+            line-height: 1.6;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            display: block; /* Override default flex from style.css */
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3, h4 {
+            color: #1c1e21;
+        }
+        h1 {
+            border-bottom: 2px solid #dddfe2;
+            padding-bottom: 10px;
+        }
+        h2 {
+            border-bottom: 1px solid #dddfe2;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+        }
+        .file-path {
+            font-weight: bold;
+            color: #1877f2;
+            background-color: #e7f3ff;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .important {
+            color: #d73a49;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            display: block; /* Make table block to allow overflow-x on its parent */
+            overflow-x: auto; /* Enable horizontal scrolling for tables on small screens */
+            white-space: nowrap; /* Prevent breaking of table content initially */
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            word-break: break-word; /* Ensure content within cells wraps */
+            white-space: normal; /* Allow normal white-space breaking within cells */
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .note {
+            background-color: #e6f7ff;
+            border-left: 5px solid #2196f3;
+            padding: 10px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        /* Nav specific styles for documentation pages (simpler nav) */
+        .doc-nav {
+            background-color: #333;
+            color: white;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .doc-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .doc-nav ul li {
+            margin: 0 15px;
+            width: auto;
+            text-align: center;
+        }
+        .doc-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .doc-nav a:hover {
+            background-color: #555; /* A slightly lighter grey for hover */
+            color: #fff;
+            border-radius: 4px;
+        }
+        @media (max-width: 600px) {
+            .doc-nav ul li {
+                width: 100%;
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="doc-nav">
+        <ul>
+            <li><a href="index.php">Inicio</a></li>
+            <li><a href="login.php">Login</a></li>
+            <li><a href="register.php">Registro</a></li>
+            <li><a href="blog.php">Blog</a>
+            <li><a href="#general">General</a></li>
+            <li><a href="#dashboard-overview">Dashboard</a></li>
+            <li><a href="#blockchain">Blockchain</a></li>
+            <li><a href="#youtube">YouTube Gallery</a></li>
+            <li><a href="#todo">To-Do List</a></li>
+            <li><a href="#notes">Notas de Video</a></li>
+            <li><a href="#admin">Admin Users</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1 id="top">Guía de Uso de la Interfaz Gráfica del Proyecto Blockchain PHP</h1>
+        
+        <section id="general">
+            <h2>1. Introducción General</h2>
+            <p>
+                Bienvenido al Proyecto Blockchain PHP. Esta guía te ayudará a navegar y utilizar las diferentes funcionalidades de la aplicación a través de su interfaz gráfica.
+            </p>
+            <div class="note">
+                <p><span class="important">Importante:</span> Para acceder a la mayoría de las funcionalidades, necesitarás registrarte e iniciar sesión. Una vez registrado, tu cuenta deberá ser <span class="important">aprobada manualmente por el dueño del sistema</span> (administrador) antes de poder acceder al dashboard. Recibirás un mensaje en pantalla indicando que tu cuenta está pendiente de aprobación.</p>
+            </div>
+        </section>
+
+        <section id="login-register">
+            <h2>2. Páginas de Acceso (Login y Registro)</h2>
+            
+            <h3>2.1 Registro de Nuevos Usuarios</h3>
+            <p>
+                Para crear una nueva cuenta:
+            </p>
+            <ol>
+                <li>Haz clic en el enlace "Registro" en la barra de navegación o en la página de Login.</li>
+                <li>Rellena el formulario con tu <strong>Nombre de Usuario</strong>, <strong>Email</strong>, <strong>Número de Teléfono</strong> y una <strong>Contraseña</strong> segura.</li>
+                <li>Haz clic en el botón "Register".</li>
+                <li>Serás informado de que tu cuenta ha sido creada y está pendiente de aprobación.</li>
+            </ol>
+
+            <h3>2.2 Inicio de Sesión</h3>
+            <p>
+                Para acceder a tu cuenta:
+            </p>
+            <ol>
+                <li>Accede a la página de Login.</li>
+                <li>Introduce tu <strong>Email</strong> y <strong>Contraseña</strong>.</li>
+                <li>Haz clic en el botón "Login".</li>
+                <li>Si tu cuenta aún no ha sido aprobada por el administrador, verás un mensaje indicando que debes esperar. Si tus credenciales son incorrectas, recibirás un error.</li>
+            </ol>
+        </section>
+
+        <section id="dashboard-overview">
+            <h2>3. El Dashboard (Panel Principal)</h2>
+            <p>
+                Una vez que tu cuenta sea aprobada e inicies sesión, accederás al Dashboard. Esta es la página central desde donde podrás interactuar con todas las funcionalidades del proyecto.
+            </p>
+            <h3>3.1 Mensaje de Verificación Pendiente</h3>
+            <p>
+                Si inicias sesión y tu cuenta aún no está completamente verificada (es decir, tu email o teléfono aún no han sido aprobados por el administrador), verás un mensaje de alerta en la parte superior del dashboard: "Espera para que el dueño del sistema verifique tus datos de email y número telefónico." Este mensaje desaparecerá una vez que ambas verificaciones sean completadas por el administrador.
+            </p>
+            <h3>3.2 Navegación del Dashboard</h3>
+            <p>
+                La barra de navegación superior (o lateral en dispositivos móviles) te permite moverte entre las diferentes secciones:
+            </p>
+            <ul>
+                <li><strong>Blockchain:</strong> Visualiza y mina bloques de la cadena.</li>
+                <li><strong>YouTube Gallery:</strong> Gestiona tu galería de videos de YouTube.</li>
+                <li><strong>To-Do List:</strong> Administra tu lista de tareas pendientes.</li>
+                <li><strong>Notas de Video:</strong> Accede a tus notas asociadas a videos.</li>
+                <li><span class="important">Manage Users (Solo Administrador):</span> Esta opción solo es visible para el dueño del sistema y le permite aprobar a nuevos usuarios.</li>
+                <li><strong>Logout:</strong> Cierra tu sesión actual.</li>
+            </ul>
+        </section>
+
+        <section id="blockchain">
+            <h2>4. Funcionalidad de Blockchain</h2>
+            <p>
+                En esta sección puedes ver la cadena de bloques actual y añadir nuevos bloques.
+            </p>
+            <ol>
+                <li><strong>Ver Blockchain:</strong> La lista de bloques actuales se mostrará automáticamente, incluyendo su número, fecha, datos, hash, hash anterior y nonce.</li>
+                <li><strong>Minar Nuevo Bloque:</strong>
+                    <ol>
+                        <li>En el campo de texto "Enter data for the new block", introduce la información que deseas almacenar en el nuevo bloque (ej. "Transacción de X BTC", "Nuevo usuario registrado").</li>
+                        <li>Haz clic en el botón "Mine Block". El sistema realizará un proceso de minado (prueba de trabajo) y, una vez completado, el nuevo bloque se añadirá a la cadena y se mostrará.</li>
+                    </ol>
+                </li>
+            </ol>
+        </section>
+
+        <section id="youtube">
+            <h2>5. Galería de YouTube</h2>
+            <p>
+                Crea tu propia galería de videos de YouTube.
+            </p>
+            <ol>
+                <li><strong>Añadir Video:</strong>
+                    <ol>
+                        <li>Pega la URL de un video de YouTube en el campo "Enter YouTube URL".</li>
+                        <li>Haz clic en el botón "Add Video". El video se incrustará en la galería.</li>
+                    </ol>
+                </li>
+                <li><strong>Eliminar Video:</strong> Cada video en la galería tiene un botón "Delete". Haz clic en él para eliminar el video de tu colección.</li>
+            </ol>
+        </section>
+
+        <section id="todo">
+            <h2>6. Lista de Tareas (To-Do List)</h2>
+            <p>
+                Un gestor simple de tareas para organizar tus actividades.
+            </p>
+            <ol>
+                <li><strong>Añadir Tarea:</strong>
+                    <ol>
+                        <li>En el campo de texto "Add a new task...", escribe la descripción de tu tarea.</li>
+                        <li>Haz clic en el botón "Add Task". La tarea aparecerá en la lista.</li>
+                    </ol>
+                </li>
+                <li><strong>Marcar como Completada:</strong> Cada tarea tiene una casilla de verificación. Márcala para indicar que la tarea está completada (el texto se tachará). Puedes desmarcarla para revertir el estado.</li>
+                <li><strong>Eliminar Tarea:</strong> Cada tarea tiene un botón "Delete". Haz clic en él para eliminar la tarea de tu lista.</li>
+            </ol>
+        </section>
+
+        <section id="notes">
+            <h2>7. Notas de Video</h2>
+            <p>
+                Toma notas personalizadas asociadas a videos (opcionalmente).
+            </p>
+            <ol>
+                <li><strong>Abrir Panel de Notas:</strong> Haz clic en el enlace "Notas de Video" en la navegación principal del Dashboard.</li>
+                <li><strong>Añadir/Editar Nota:</strong>
+                    <ol>
+                        <li>Puedes introducir una "URL del Video" y un "Marca de tiempo (segundos)" opcionales para asociar la nota a un momento específico de un video.</li>
+                        <li>Introduce un "Título de la Nota" y el "Contenido de la Nota" (obligatorios).</li>
+                        <li>Haz clic en "Guardar Nota" para crearla o "Actualizar Nota" si estás editando una existente.</li>
+                    </ol>
+                </li>
+                <li><strong>Editar Nota Existente:</strong> En la lista de "Notas Guardadas", haz clic en el botón "Editar" junto a la nota que deseas modificar. La información de la nota se cargará en el formulario para que la edites.</li>
+                <li><strong>Eliminar Nota:</strong> En la lista de "Notas Guardadas", haz clic en el botón "Eliminar" junto a la nota que deseas borrar.</li>
+            </ol>
+        </section>
+
+        <section id="admin">
+            <h2>8. Gestión de Usuarios (Panel de Administrador)</h2>
+            <div class="note">
+                <p><span class="important">Acceso Restringido:</span> Esta sección solo es accesible para el dueño del sistema, cuyo email es <span class="file-path">mostlyphpsoftware@gmail.com</span>.</p>
+            </div>
+            <p>
+                Si eres el administrador, puedes acceder a esta sección para gestionar las verificaciones de email y teléfono de los usuarios.
+            </p>
+            <ol>
+                <li>Haz clic en el enlace "Manage Users" en la barra de navegación del Dashboard.</li>
+                <li>Verás una tabla con todos los usuarios registrados, su email, teléfono y el estado de verificación de cada uno.</li>
+                <li>Para verificar o desverificar el email/teléfono de un usuario, marca o desmarca la casilla correspondiente.</li>
+                <li>Haz clic en el botón "Save" junto al usuario para aplicar los cambios.</li>
+            </ol>
+        </section>
+
+        <section id="logout">
+            <h2>9. Cerrar Sesión</h2>
+            <p>
+                Para cerrar tu sesión de forma segura, haz clic en el enlace "Logout" en la barra de navegación. Esto te redirigirá a la página de Login.
+            </p>
+        </section>
+
+        <a href="#top" style="display: block; text-align: center; margin-top: 40px;">Volver Arriba</a>
+    </div>
+</body>
+</html>

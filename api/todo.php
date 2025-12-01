@@ -23,19 +23,42 @@ try {
     } 
     elseif ($method === 'POST') {
         $data = json_decode(file_get_contents("php://input"), true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $response['message'] = 'Invalid JSON input.';
+            http_response_code(400); // Bad Request
+            echo json_encode($response);
+            exit();
+        }
         $task = $data['task'] ?? '';
 
         if (!empty($task)) {
             $sql = "INSERT INTO tasks (user_id, task) VALUES (:user_id, :task)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute(['user_id' => $user_id, 'task' => $task]);
-            $response = ['status' => 'success', 'message' => 'Task added.', 'task_id' => $pdo->lastInsertId()];
+            $new_task_id = $pdo->lastInsertId();
+            $response = [
+                'status' => 'success',
+                'message' => 'Task added.',
+                'task' => [ // Return a full task object
+                    'id' => $new_task_id,
+                    'task' => $task,
+                    'is_completed' => 0 // Default value
+                ]
+            ];
         } else {
             $response['message'] = 'Task cannot be empty.';
         }
     } 
     elseif ($method === 'PUT') {
         $data = json_decode(file_get_contents("php://input"), true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $response['message'] = 'Invalid JSON input.';
+            http_response_code(400); // Bad Request
+            echo json_encode($response);
+            exit();
+        }
         $task_id = $data['id'] ?? null;
         $is_completed = $data['is_completed'] ?? null;
 

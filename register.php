@@ -7,28 +7,41 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="container">
-        <form id="register-form">
-            <h2>Register</h2>
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
+    <div class="dashboard-container">
+        <header>
+            <h1>Register</h1>
+            <nav>
+                <a href="login.php">Login</a>
+                <a href="blog.php">Blog</a>
+                <a href="gui_documentation.html">Guía de Uso</a>
+            </nav>
+        </header>
+
+        <main>
+            <div class="container">
+                <form id="register-form">
+                    <h2>Register</h2>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit">Register</button>
+                    <p>Already have an account? <a href="login.php">Login here</a></p>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit">Register</button>
-            <p>Already have an account? <a href="login.php">Login here</a></p>
-        </form>
+        </main>
     </div>
     <script src="js/api.js"></script>
     <script src="js/register.js"></script>

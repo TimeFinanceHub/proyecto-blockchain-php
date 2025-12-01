@@ -27,6 +27,14 @@ try {
 
         case 'POST':
             $data = json_decode(file_get_contents('php://input'), true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                $response['message'] = 'Invalid JSON input.';
+                http_response_code(400); // Bad Request
+                echo json_encode($response);
+                exit();
+            }
+
             $url = $data['url'] ?? '';
 
             if (empty($url) || !filter_var($url, FILTER_VALIDATE_URL)) {

@@ -115,230 +115,233 @@ document.addEventListener('DOMContentLoaded', function () {
         fetchChain();
     }
 
-    // --- YouTube Gallery (CRUD) ---
-    const videoGalleryContainer = document.getElementById('video-gallery-container');
-    const youtubeUrlInput = document.getElementById('youtube-url');
-    const addVideoButton = document.getElementById('add-video-button');
-
-    async function fetchVideos() {
-        try {
-            const response = await fetch('api/videos.php');
-            const result = await response.json();
-            if (result.status === 'success') {
-                renderVideos(result.videos);
-            } else if (response.status !== 401) {
-                showNotification(result.message, true);
-            }
-        } catch (error) {
-            console.error('Error fetching videos:', error);
-        }
-    }
-
-    function renderVideos(videos, newVideoId = null) {
-        if (!videos || videos.length === 0) {
-            videoGalleryContainer.innerHTML = '<p>No videos in your gallery yet. Add one above!</p>';
-            return;
-        }
-        
-        if (newVideoId === null) { // Full re-render
-             videoGalleryContainer.innerHTML = '';
-        }
-
-        videos.forEach(video => {
-            // Avoid re-rendering existing items on add
-            if (newVideoId !== null && video.id !== newVideoId) return;
-
-            const videoWrapper = document.createElement('div');
-            videoWrapper.className = 'video-wrapper fade-in';
-            videoWrapper.dataset.id = video.id;
-            
-            videoWrapper.innerHTML = `
-                <iframe src="https://www.youtube.com/embed/${video.video_id}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                <button class="delete-video-btn">Delete</button>
-            `;
-            
-            videoWrapper.querySelector('.delete-video-btn').onclick = () => deleteVideo(video.id);
-            
-            if (videoGalleryContainer.querySelector('p')) {
-                videoGalleryContainer.innerHTML = '';
-            }
-            videoGalleryContainer.appendChild(videoWrapper);
-        });
-    }
-
-    addVideoButton.addEventListener('click', async () => {
-        const url = youtubeUrlInput.value.trim();
-        if (!url) {
-            showNotification('Please enter a YouTube URL.', true);
-            return;
-        }
-        try {
-            const response = await fetch('api/videos.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ url: url })
-            });
-            const result = await response.json();
-            if (result.status === 'success') {
-                showNotification('Video added!');
-                youtubeUrlInput.value = '';
-                renderVideos([result.video], result.video.id);
-            } else {
-                showNotification(`Error: ${result.message}`, true);
-            }
-        } catch (error) {
-            console.error('Error adding video:', error);
-        }
-    });
-
-    async function deleteVideo(id) {
-        const videoWrapper = document.querySelector(`.video-wrapper[data-id='${id}']`);
-        if (videoWrapper && confirm('Are you sure you want to delete this video?')) {
-            videoWrapper.classList.add('fade-out');
-            videoWrapper.addEventListener('animationend', async () => {
+        // --- YouTube Gallery (CRUD) ---
+        const videoGalleryContainer = document.getElementById('video-gallery-container');
+        const youtubeUrlInput = document.getElementById('youtube-url');
+        const addVideoButton = document.getElementById('add-video-button');
+        if (videoGalleryContainer && youtubeUrlInput && addVideoButton) { // Conditional check
+            async function fetchVideos() {
                 try {
-                    const response = await fetch(`api/videos.php?id=${id}`, { method: 'DELETE' });
+                    const response = await fetch('api/videos.php');
                     const result = await response.json();
                     if (result.status === 'success') {
-                        showNotification('Video deleted.');
-                        videoWrapper.remove();
-                         if (videoGalleryContainer.childElementCount === 0) {
-                            videoGalleryContainer.innerHTML = '<p>No videos in your gallery yet. Add one above!</p>';
-                        }
-                    } else {
-                        showNotification(`Error: ${result.message}`, true);
-                        videoWrapper.classList.remove('fade-out');
+                        renderVideos(result.videos);
+                    } else if (response.status !== 401) {
+                        showNotification(result.message, true);
                     }
                 } catch (error) {
-                    console.error('Error deleting video:', error);
-                    videoWrapper.classList.remove('fade-out');
+                    console.error('Error fetching videos:', error);
+                }
+            }
+    
+            function renderVideos(videos, newVideoId = null) {
+                if (!videos || videos.length === 0) {
+                    videoGalleryContainer.innerHTML = '<p>No videos in your gallery yet. Add one above!</p>';
+                    return;
+                }
+                
+                if (newVideoId === null) { // Full re-render
+                    videoGalleryContainer.innerHTML = '';
+                }
+    
+                videos.forEach(video => {
+                    // Avoid re-rendering existing items on add
+                    if (newVideoId !== null && video.id !== newVideoId) return;
+    
+                    const videoWrapper = document.createElement('div');
+                    videoWrapper.className = 'video-wrapper fade-in';
+                    videoWrapper.dataset.id = video.id;
+                    
+                    videoWrapper.innerHTML = `
+                        <iframe src="https://www.youtube.com/embed/${video.video_id}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <button class="delete-video-btn">Delete</button>
+                    `;
+                    
+                    videoWrapper.querySelector('.delete-video-btn').onclick = () => deleteVideo(video.id);
+                    
+                    if (videoGalleryContainer.querySelector('p')) {
+                        videoGalleryContainer.innerHTML = '';
+                    }
+                    videoGalleryContainer.appendChild(videoWrapper);
+                });
+            }
+    
+            addVideoButton.addEventListener('click', async () => {
+                const url = youtubeUrlInput.value.trim();
+                if (!url) {
+                    showNotification('Please enter a YouTube URL.', true);
+                    return;
+                }
+                try {
+                    const response = await fetch('api/videos.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url: url })
+                    });
+                    const result = await response.json();
+                    if (result.status === 'success') {
+                        showNotification('Video added!');
+                        youtubeUrlInput.value = '';
+                        renderVideos([result.video], result.video.id);
+                    } else {
+                        showNotification(`Error: ${result.message}`, true);
+                    }
+                } catch (error) {
+                    console.error('Error adding video:', error);
                 }
             });
+    
+            async function deleteVideo(id) {
+                const videoWrapper = document.querySelector(`.video-wrapper[data-id='${id}']`);
+                if (videoWrapper && confirm('Are you sure you want to delete this video?')) {
+                    videoWrapper.classList.add('fade-out');
+                    videoWrapper.addEventListener('animationend', async () => {
+                        try {
+                            const response = await fetch(`api/videos.php?id=${id}`, { method: 'DELETE' });
+                            const result = await response.json();
+                            if (result.status === 'success') {
+                                showNotification('Video deleted.');
+                                videoWrapper.remove();
+                                if (videoGalleryContainer.childElementCount === 0) {
+                                    videoGalleryContainer.innerHTML = '<p>No videos in your gallery yet. Add one above!</p>';
+                                }
+                            } else {
+                                showNotification(`Error: ${result.message}`, true);
+                                videoWrapper.classList.remove('fade-out');
+                            }
+                        } catch (error) {
+                            console.error('Error deleting video:', error);
+                            videoWrapper.classList.remove('fade-out');
+                        }
+                    });
+                }
+            }
+            fetchVideos(); // Call fetchVideos conditionally
         }
-    }
-
     // --- To-Do List ---
     const taskList = document.getElementById('task-list');
     const newTaskInput = document.getElementById('new-task-input');
     const addTaskButton = document.getElementById('add-task-button');
-
-    async function fetchTasks() {
-        try {
-            const response = await fetch('api/todo.php');
-            const result = await response.json();
-            if (result.status === 'success') {
-                renderTasks(result.tasks);
-            } else if (response.status !== 401) {
-                showNotification(result.message, true);
-            }
-        } catch (error) {
-            console.error('Error fetching tasks:', error);
-        }
-    }
-
-    function renderTasks(tasks, newTask = null) {
-        if (!newTask) { // Full re-render if no new task, otherwise append
-            taskList.innerHTML = '';
-        }
-        
-        if (!tasks || tasks.length === 0) {
-            taskList.innerHTML = '<p>No tasks yet. Add one above!</p>';
-            return;
-        }
-
-        tasks.forEach(task => {
-            // If we are adding a new task, only render the new one
-            if (newTask && task.id !== newTask.id) return;
-
-            const li = document.createElement('li');
-            li.dataset.id = task.id;
-            li.className = task.is_completed ? 'completed fade-in' : 'fade-in';
-            
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.checked = task.is_completed;
-            checkbox.addEventListener('change', () => toggleTaskCompletion(task.id, !task.is_completed));
-
-            const span = document.createElement('span');
-            span.textContent = task.task;
-
-            const deleteButton = document.createElement('button');
-            deleteButton.textContent = 'Delete';
-            deleteButton.className = 'delete-btn';
-            deleteButton.addEventListener('click', () => deleteTask(task.id));
-
-            li.appendChild(checkbox);
-            li.appendChild(span);
-            li.appendChild(deleteButton);
-            taskList.appendChild(li);
-        });
-    }
-    
-    addTaskButton.addEventListener('click', async () => {
-        const taskText = newTaskInput.value.trim();
-        if (taskText) {
+    if (taskList && newTaskInput && addTaskButton) { // Conditional check
+        async function fetchTasks() {
             try {
-                const response = await fetch('api/todo.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ task: taskText })
-                });
+                const response = await fetch('api/todo.php');
                 const result = await response.json();
                 if (result.status === 'success') {
-                    showNotification('Task added!');
-                    newTaskInput.value = '';
-                    renderTasks([result.task], result.task); // Render only the new task
-                } else {
-                    showNotification(`Error: ${result.message}`, true);
+                    renderTasks(result.tasks);
+                } else if (response.status !== 401) {
+                    showNotification(result.message, true);
                 }
             } catch (error) {
-                console.error('Error adding task:', error);
+                console.error('Error fetching tasks:', error);
             }
         }
-    });
 
-    async function toggleTaskCompletion(id, is_completed) {
-        const taskElement = document.querySelector(`#task-list li[data-id='${id}']`);
-        if (taskElement) {
-            taskElement.classList.toggle('completed', is_completed);
-            try {
-                await fetch('api/todo.php', {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: id, is_completed: is_completed })
-                });
-                showNotification(`Task ${is_completed ? 'completed' : 'uncompleted'}!`);
-            } catch (error) {
-                console.error('Error updating task:', error);
-                showNotification('Error updating task.', true);
-                taskElement.classList.toggle('completed', !is_completed); // Revert if error
+        function renderTasks(tasks, newTask = null) {
+            if (!newTask) { // Full re-render if no new task, otherwise append
+                taskList.innerHTML = '';
             }
-        }
-    }
+            
+            if (!tasks || tasks.length === 0) {
+                taskList.innerHTML = '<p>No tasks yet. Add one above!</p>';
+                return;
+            }
 
-    async function deleteTask(id) {
-        const taskElement = document.querySelector(`#task-list li[data-id='${id}']`);
-        if (taskElement && confirm('Are you sure you want to delete this task?')) {
-            taskElement.classList.add('fade-out');
-            taskElement.addEventListener('animationend', async () => {
-                try {
-                    await fetch(`api/todo.php?id=${id}`, { method: 'DELETE' });
-                    showNotification('Task deleted.');
-                    taskElement.remove();
-                     if (taskList.childElementCount === 0) {
-                        taskList.innerHTML = '<p>No tasks yet. Add one above!</p>';
-                    }
-                } catch (error) {
-                    console.error('Error deleting task:', error);
-                    showNotification('Error deleting task.', true);
-                    taskElement.classList.remove('fade-out'); // Revert animation if error
-                }
+            tasks.forEach(task => {
+                // If we are adding a new task, only render the new one
+                if (newTask && task.id !== newTask.id) return;
+
+                const li = document.createElement('li');
+                li.dataset.id = task.id;
+                li.className = task.is_completed ? 'completed fade-in' : 'fade-in';
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.checked = task.is_completed;
+                checkbox.addEventListener('change', () => toggleTaskCompletion(task.id, !task.is_completed));
+
+                const span = document.createElement('span');
+                span.textContent = task.task;
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.className = 'delete-btn';
+                deleteButton.addEventListener('click', () => deleteTask(task.id));
+
+                li.appendChild(checkbox);
+                li.appendChild(span);
+                li.appendChild(deleteButton);
+                taskList.appendChild(li);
             });
         }
+        
+        addTaskButton.addEventListener('click', async () => {
+            const taskText = newTaskInput.value.trim();
+            if (taskText) {
+                try {
+                    const response = await fetch('api/todo.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ task: taskText })
+                    });
+                    const result = await response.json();
+                    if (result.status === 'success') {
+                        showNotification('Task added!');
+                        newTaskInput.value = '';
+                        renderTasks([result.task], result.task); // Render only the new task
+                    } else {
+                        showNotification(`Error: ${result.message}`, true);
+                    }
+                } catch (error) {
+                    console.error('Error adding task:', error);
+                }
+            }
+        });
+
+        async function toggleTaskCompletion(id, is_completed) {
+            const taskElement = document.querySelector(`#task-list li[data-id='${id}']`);
+            if (taskElement) {
+                taskElement.classList.toggle('completed', is_completed);
+                try {
+                    await fetch('api/todo.php', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: id, is_completed: is_completed })
+                    });
+                    showNotification(`Task ${is_completed ? 'completed' : 'uncompleted'}!`);
+                } catch (error) {
+                    console.error('Error updating task:', error);
+                    showNotification('Error updating task.', true);
+                    taskElement.classList.toggle('completed', !is_completed); // Revert if error
+                }
+            }
+        }
+
+        async function deleteTask(id) {
+            const taskElement = document.querySelector(`#task-list li[data-id='${id}']`);
+            if (taskElement && confirm('Are you sure you want to delete this task?')) {
+                taskElement.classList.add('fade-out');
+                taskElement.addEventListener('animationend', async () => {
+                    try {
+                        await fetch(`api/todo.php?id=${id}`, { method: 'DELETE' });
+                        showNotification('Task deleted.');
+                        taskElement.remove();
+                        if (taskList.childElementCount === 0) {
+                            taskList.innerHTML = '<p>No tasks yet. Add one above!</p>';
+                        }
+                    } catch (error) {
+                        console.error('Error deleting task:', error);
+                        showNotification('Error deleting task.', true);
+                        taskElement.classList.remove('fade-out'); // Revert animation if error
+                    }
+                });
+            }
+        }
+        fetchTasks(); // Call fetchTasks conditionally
     }
 
     // --- Initial Data Load ---
-    fetchVideos();
+    // (Calls are now made conditionally within their respective blocks)
     // --- Video Notes ---
     const videoNotesPanel = document.getElementById('video-notes-panel');
     const toggleNotesPanelBtn = document.getElementById('toggle-notes-panel-btn');
@@ -356,9 +359,14 @@ document.addEventListener('DOMContentLoaded', function () {
     if (toggleNotesPanelBtn) {
         toggleNotesPanelBtn.addEventListener('click', (e) => {
             e.preventDefault(); // Prevent default link behavior
-            videoNotesPanel.classList.toggle('open');
-            if (videoNotesPanel.classList.contains('open')) {
-                fetchNotes();
+            const currentVideoNotesPanel = document.getElementById('video-notes-panel'); // Re-get the element
+            if (currentVideoNotesPanel) {
+                currentVideoNotesPanel.classList.toggle('open');
+                if (currentVideoNotesPanel.classList.contains('open')) {
+                    fetchNotes();
+                }
+            } else {
+                console.error('Video notes panel not found when toggling.');
             }
         });
     }
@@ -492,9 +500,15 @@ document.addEventListener('DOMContentLoaded', function () {
         if (noteItem && confirm('¿Estás seguro de que quieres eliminar esta nota?')) {
             noteItem.classList.add('fade-out');
             noteItem.addEventListener('animationend', async () => {
+                console.log('Attempting to delete note with ID:', id);
                 try {
-                    const response = await fetch(`api/video_notes.php?id=${id}`, { method: 'DELETE' });
+                    const deleteUrl = `api/video_notes.php?id=${id}`;
+                    console.log('Calling API:', deleteUrl, 'with method DELETE');
+                    const response = await fetch(deleteUrl, { method: 'DELETE' });
+                    console.log('API Response status:', response.status);
                     const result = await response.json();
+                    console.log('API Response result:', result);
+
                     if (result.status === 'success') {
                         showNotification('Nota eliminada.');
                         noteItem.remove();

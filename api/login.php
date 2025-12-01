@@ -9,6 +9,13 @@ $response = ['status' => 'error', 'message' => 'An error occurred.'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
 
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        $response['message'] = 'Invalid JSON input.';
+        http_response_code(400); // Bad Request
+        echo json_encode($response);
+        exit();
+    }
+
     $email = $data['email'] ?? '';
     $password = $data['password'] ?? '';
 
@@ -16,15 +23,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $response['message'] = 'Email and password are required.';
     } else {
         try {
-            $sql = "SELECT id, password, email_verified FROM users WHERE email = :email";
+            $sql = "SELECT id, password, email_verified, phone_verified FROM users WHERE email = :email";
             $stmt = $pdo->prepare($sql);
             $stmt->execute(['email' => $email]);
             
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($user && password_verify($password, $user['password'])) {
-                if ($user['email_verified'] == 0) {
-                     $response['message'] = 'Please verify your email before logging in.';
+                if ($user['email_verified'] == 0 || $user['phone_verified'] == 0) {
+                     $response['message'] = 'Espera a que el dueño del sistema apruebe tu email y teléfono.';
                 } else {
                     $_SESSION['user_id'] = $user['id'];
                     $response['status'] = 'success';

@@ -8,21 +8,28 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once 'api/config.php'; // Include config to get PDO object
 
-$user_id = $_SESSION['user_id'];
-$email_verified = 1; // Default to true
+    $user_id = $_SESSION['user_id'];
+    $email_verified = 1; // Default to true
+    $phone_verified = 1; // Default to true
+    $current_user_email = ''; // Initialize
 
-try {
-    $stmt = $pdo->prepare("SELECT email_verified FROM users WHERE id = :user_id");
-    $stmt->execute(['user_id' => $user_id]);
-    $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
+    try {
+        $stmt = $pdo->prepare("SELECT email_verified, phone_verified, email FROM users WHERE id = :user_id");
+        $stmt->execute(['user_id' => $user_id]);
+        $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user_data) {
-        $email_verified = $user_data['email_verified'];
+        if ($user_data) {
+            $email_verified = $user_data['email_verified'];
+            $phone_verified = $user_data['phone_verified'];
+            $current_user_email = $user_data['email'];
+        }
+    } catch (PDOException $e) {
+        // Log error, but don't prevent dashboard from loading
+        error_log("Error fetching user verification status: " . $e->getMessage());
     }
-} catch (PDOException $e) {
-    // Log error, but don't prevent dashboard from loading
-    error_log("Error fetching email verification status: " . $e->getMessage());
-}
+    
+    // Check if the current user is the admin
+    $is_admin = ($current_user_email === 'mostlyphpsoftware@gmail.com');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -57,18 +64,19 @@ try {
                 <a href="#blockchain">Blockchain</a>
                 <a href="#youtube-gallery">YouTube Gallery</a>
                 <a href="#todo-list">To-Do List</a>
-                <a href="documentacion.html">Documentación</a>
-                <a href="documentacion_email_server.html">Configurar Mail Local</a>
+                <a href="blog.php">Blog</a>
+                <?php if ($is_admin): ?>
+                <a href="admin_users.php">Manage Users</a>
+                <?php endif; ?>
+                <a href="gui_documentation.html">Guía de Uso</a>
                 <a href="#" id="toggle-notes-panel-btn">Notas de Video</a>
                 <a href="logout.php">Logout</a>
             </nav>
         </header>
-
         <main>
-            <?php if ($email_verified == 0): ?>
+            <?php if ($email_verified == 0 || $phone_verified == 0): ?>
                 <div class="verification-alert">
-                    Your email address is not verified. Please check your inbox for a verification link.
-                    <!-- TODO: Add a button/link to resend verification email -->
+                    Espera para que el dueño del sistema verifique tus datos de email y número telefónico.
                 </div>
             <?php endif; ?>
             <section id="blockchain">
