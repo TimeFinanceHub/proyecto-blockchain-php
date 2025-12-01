@@ -59,6 +59,7 @@ try {
                 <a href="#todo-list">To-Do List</a>
                 <a href="documentacion.html">Documentación</a>
                 <a href="documentacion_email_server.html">Configurar Mail Local</a>
+                <a href="#" id="toggle-notes-panel-btn">Notas de Video</a>
                 <a href="logout.php">Logout</a>
             </nav>
         </header>
@@ -94,6 +95,41 @@ try {
             </section>
         </main>
     </div>
+
+    <!-- Video Notes Panel -->
+    <div id="video-notes-panel" class="video-notes-panel">
+        <div class="panel-header">
+            <h3>Mis Notas de Video</h3>
+            <button id="close-notes-panel-btn" class="close-btn">&times;</button>
+        </div>
+        <div class="panel-body">
+            <form id="video-note-form">
+                <input type="hidden" id="note-id" value="">
+                <div class="form-group">
+                    <label for="note-video-url">URL del Video (Opcional)</label>
+                    <input type="text" id="note-video-url" placeholder="URL de YouTube">
+                </div>
+                 <div class="form-group">
+                    <label for="note-timestamp">Marca de tiempo (segundos - Opcional)</label>
+                    <input type="number" id="note-timestamp" placeholder="Ej. 120 (para 2:00)">
+                </div>
+                <div class="form-group">
+                    <label for="note-title">Título de la Nota</label>
+                    <input type="text" id="note-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="note-content">Contenido de la Nota</label>
+                    <textarea id="note-content" rows="5" required></textarea>
+                </div>
+                <button type="submit" id="save-note-btn">Guardar Nota</button>
+            </form>
+            <h4>Notas Guardadas:</h4>
+            <ul id="notes-list">
+                <p class="no-notes-message">No hay notas guardadas aún.</p>
+            </ul>
+        </div>
+    </div>
+    
     <script src="js/api.js"></script>
     <script src="js/dashboard.js"></script>
     <div id="notification-container"></div>

@@ -339,6 +339,180 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- Initial Data Load ---
     fetchVideos();
-    fetchTasks();
+    // --- Video Notes ---
+    const videoNotesPanel = document.getElementById('video-notes-panel');
+    const toggleNotesPanelBtn = document.getElementById('toggle-notes-panel-btn');
+    const closeNotesPanelBtn = document.getElementById('close-notes-panel-btn');
+    const videoNoteForm = document.getElementById('video-note-form');
+    const noteIdInput = document.getElementById('note-id');
+    const noteVideoUrlInput = document.getElementById('note-video-url');
+    const noteTimestampInput = document.getElementById('note-timestamp');
+    const noteTitleInput = document.getElementById('note-title');
+    const noteContentInput = document.getElementById('note-content');
+    const notesList = document.getElementById('notes-list');
+    const saveNoteBtn = document.getElementById('save-note-btn');
+
+    // Toggle panel visibility
+    if (toggleNotesPanelBtn) {
+        toggleNotesPanelBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent default link behavior
+            videoNotesPanel.classList.toggle('open');
+            if (videoNotesPanel.classList.contains('open')) {
+                fetchNotes();
+            }
+        });
+    }
+
+    if (closeNotesPanelBtn) {
+        closeNotesPanelBtn.addEventListener('click', () => {
+            videoNotesPanel.classList.remove('open');
+        });
+    }
+
+    // Fetch and render notes
+    async function fetchNotes() {
+        try {
+            const response = await fetch('api/video_notes.php');
+            const result = await response.json();
+            if (result.status === 'success') {
+                renderNotes(result.notes);
+            } else if (response.status !== 401) {
+                showNotification(result.message, true);
+            }
+        } catch (error) {
+            console.error('Error fetching notes:', error);
+            showNotification('Error loading video notes.', true);
+        }
+    }
+
+    function renderNotes(notes) {
+        notesList.innerHTML = ''; // Clear existing notes
+        if (!notes || notes.length === 0) {
+            notesList.innerHTML = '<p class="no-notes-message">No hay notas guardadas aún.</p>';
+            return;
+        }
+
+        notes.forEach(note => {
+            const li = document.createElement('li');
+            li.dataset.id = note.id;
+            li.className = 'video-note-item fade-in';
+            li.innerHTML = `
+                <h4>${note.title}</h4>
+                ${note.video_url ? `<p>Video: <a href="${note.video_url}" target="_blank">${note.video_url.substring(0, 30)}...</a></p>` : ''}
+                ${note.timestamp_in_video ? `<p>Tiempo: ${formatTime(note.timestamp_in_video)}</p>` : ''}
+                <p>${note.content.substring(0, 100)}...</p>
+                <div class="note-actions">
+                    <button class="edit-note-btn">Editar</button>
+                    <button class="delete-note-btn">Eliminar</button>
+                </div>
+            `;
+            notesList.appendChild(li);
+
+            li.querySelector('.edit-note-btn').addEventListener('click', () => editNote(note));
+            li.querySelector('.delete-note-btn').addEventListener('click', () => deleteNote(note.id));
+        });
+    }
+
+    // Helper to format time (e.g., 120 -> 02:00)
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+    }
+
+    // Add/Edit Note Form Submission
+    if (videoNoteForm) {
+        videoNoteForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const id = noteIdInput.value;
+            const video_url = noteVideoUrlInput.value.trim() || null;
+            const timestamp_in_video = noteTimestampInput.value.trim() || null;
+            const title = noteTitleInput.value.trim();
+            const content = noteContentInput.value.trim();
+
+            if (!title || !content) {
+                showNotification('El título y el contenido de la nota son obligatorios.', true);
+                return;
+            }
+
+            const method = id ? 'PUT' : 'POST';
+            const url = 'api/video_notes.php';
+
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: id,
+                        video_url: video_url,
+                        timestamp_in_video: timestamp_in_video,
+                        title: title,
+                        content: content
+                    })
+                });
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    showNotification(result.message);
+                    // Clear form
+                    noteIdInput.value = '';
+                    noteVideoUrlInput.value = '';
+                    noteTimestampInput.value = '';
+                    noteTitleInput.value = '';
+                    noteContentInput.value = '';
+                    if (saveNoteBtn) saveNoteBtn.textContent = 'Guardar Nota';
+                    fetchNotes(); // Refresh list
+                } else {
+                    showNotification(`Error: ${result.message}`, true);
+                }
+            } catch (error) {
+                console.error('Error saving note:', error);
+                showNotification('An error occurred while saving the note.', true);
+            }
+        });
+    }
+
+
+    // Populate form for editing
+    function editNote(note) {
+        noteIdInput.value = note.id;
+        noteVideoUrlInput.value = note.video_url || '';
+        noteTimestampInput.value = note.timestamp_in_video || '';
+        noteTitleInput.value = note.title;
+        noteContentInput.value = note.content;
+        if (saveNoteBtn) saveNoteBtn.textContent = 'Actualizar Nota';
+        videoNotesPanel.classList.add('open'); // Ensure panel is open
+        showNotification('Cargando nota para edición.');
+    }
+
+    // Delete Note
+    async function deleteNote(id) {
+        const noteItem = document.querySelector(`#notes-list li[data-id='${id}']`);
+        if (noteItem && confirm('¿Estás seguro de que quieres eliminar esta nota?')) {
+            noteItem.classList.add('fade-out');
+            noteItem.addEventListener('animationend', async () => {
+                try {
+                    const response = await fetch(`api/video_notes.php?id=${id}`, { method: 'DELETE' });
+                    const result = await response.json();
+                    if (result.status === 'success') {
+                        showNotification('Nota eliminada.');
+                        noteItem.remove();
+                        if (notesList.childElementCount === 0) {
+                            notesList.innerHTML = '<p class="no-notes-message">No hay notas guardadas aún.</p>';
+                        }
+                    } else {
+                        showNotification(`Error: ${result.message}`, true);
+                        noteItem.classList.remove('fade-out'); // Revert animation if error
+                    }
+                } catch (error) {
+                    console.error('Error deleting note:', error);
+                    showNotification('An error occurred while deleting the note.', true);
+                    noteItem.classList.remove('fade-out'); // Revert animation if error
+                }
+            });
+        }
+    }
+
 });
 
