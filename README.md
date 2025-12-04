@@ -271,16 +271,16 @@ A continuación, se listan algunos de los endpoints clave disponibles. Para deta
 
 ## Licencia y Derechos de Autor
 
-Este proyecto, incluyendo todo su código fuente, documentación y activos, es propiedad intelectual exclusiva de [**Tu Nombre/Entidad**].
+Este proyecto, incluyendo todo su código fuente, documentación y activos, es propiedad intelectual exclusiva de **Ramiro G Glez.**].
 
 Al utilizar, modificar o distribuir este proyecto, usted acepta los siguientes términos:
 
-1.  **Créditos y Atribución:** Cualquier uso o derivación de este proyecto debe incluir una atribución clara y visible a [**Tu Nombre/Entidad**] como el autor original y propietario intelectual. Esto debe incluir, pero no limitarse a, la conservación de esta sección de licencia en el `README.md` y en cualquier documentación relevante.
-2.  **Propiedad Intelectual:** La propiedad intelectual sobre el diseño, la arquitectura y el código original de este proyecto permanece en todo momento con [**Tu Nombre/Entidad**]. Las modificaciones o mejoras realizadas por terceros no confieren derechos de propiedad sobre el proyecto original.
-3.  **Monetización y Participación en Ganancias:** Si este proyecto (o cualquier derivación, adaptación o software que incorpore sustancialmente este proyecto) es utilizado con fines comerciales o monetizado de alguna forma, se requerirá un porcentaje del [**especificar porcentaje, ej. 10%**] de las ganancias brutas obtenidas de dicha monetización. Este porcentaje debe ser negociado y acordado formalmente con [**Tu Nombre/Entidad**] antes de la monetización.
-4.  **Publicación de Modificaciones:** Cualquier modificación, mejora o adaptación realizada sobre este proyecto debe ser publicada y puesta a disposición del autor original ([**Tu Nombre/Entidad**]) de forma transparente y accesible. Esto incluye la publicación del código fuente de las modificaciones, idealmente mediante un pull request o un repositorio público enlazado. El autor original se reserva el derecho de integrar o rechazar dichas modificaciones en el proyecto principal.
+1.  **Créditos y Atribución:** Cualquier uso o derivación de este proyecto debe incluir una atribución clara y visible a **Ramiro G Glez.** como el autor original y propietario intelectual. Esto debe incluir, pero no limitarse a, la conservación de esta sección de licencia en el `README.md` y en cualquier documentación relevante.
+2.  **Propiedad Intelectual:** La propiedad intelectual sobre el diseño, la arquitectura y el código original de este proyecto permanece en todo momento con **Ramiro G Glez.**]. Las modificaciones o mejoras realizadas por terceros no confieren derechos de propiedad sobre el proyecto original.
+3.  **Monetización y Participación en Ganancias:** Si este proyecto (o cualquier derivación, adaptación o software que incorpore sustancialmente este proyecto) es utilizado con fines comerciales o monetizado de alguna forma, se requerirá un porcentaje del [**especificar porcentaje, ej. 10%**] de las ganancias brutas obtenidas de dicha monetización. Este porcentaje debe ser negociado y acordado formalmente con **Ramiro G Glez.**] antes de la monetización.
+4.  **Publicación de Modificaciones:** Cualquier modificación, mejora o adaptación realizada sobre este proyecto debe ser publicada y puesta a disposición del autor original (**Ramiro G Glez.**]) de forma transparente y accesible. Esto incluye la publicación del código fuente de las modificaciones, idealmente mediante un pull request o un repositorio público enlazado. El autor original se reserva el derecho de integrar o rechazar dichas modificaciones en el proyecto principal.
 
-Para cualquier consulta, propuesta de colaboración o solicitud de licencia comercial personalizada, por favor, contacta a [**tu.email@example.com**].
+Para cualquier consulta, propuesta de colaboración o solicitud de licencia comercial personalizada, por favor, contacta a [**ramiro.glez@example.com**].
 
 ---
 
