@@ -512,6 +512,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (result.status === 'success') {
                         showNotification('Nota eliminada.');
                         noteItem.remove();
+                        // No need to re-fetch if remove() works and list is empty check is done
                         if (notesList.childElementCount === 0) {
                             notesList.innerHTML = '<p class="no-notes-message">No hay notas guardadas aún.</p>';
                         }
@@ -519,6 +520,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         showNotification(`Error: ${result.message}`, true);
                         noteItem.classList.remove('fade-out'); // Revert animation if error
                     }
+                    fetchNotes(); // Always refresh list after API call, regardless of success/failure
                 } catch (error) {
                     console.error('Error deleting note:', error);
                     showNotification('An error occurred while deleting the note.', true);

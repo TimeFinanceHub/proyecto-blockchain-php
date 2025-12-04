@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="/favicon.png" type="image/png">
 </head>
 <body>
     <div class="dashboard-container">
@@ -14,6 +15,8 @@
                 <a href="register.php">Register</a>
                 <a href="blog.php">Blog</a>
                 <a href="gui_documentation.html">Guía de Uso</a>
+                <a href="chain_union.php">Unión de Cadenas</a>
+                <a href="buy.php">Comprar Código</a>
             </nav>
         </header>
 

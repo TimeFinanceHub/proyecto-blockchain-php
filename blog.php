@@ -10,6 +10,7 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog - Public & Private Posts</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="/favicon.png" type="image/png">
     <style>
         .blog-container {
             max-width: 900px;
@@ -136,15 +137,21 @@ session_start();
         <header>
             <h1>Blog</h1>
             <nav>
+                <?php if (isset($_SESSION['user_id'])): ?>
                 <a href="dashboard.php">Dashboard</a>
                 <a href="#public-posts">Muro Público</a>
                 <a href="#private-posts">Mis Posts Privados</a>
                 <a href="gui_documentation.html">Guía de Uso</a>
-                <?php if (isset($_SESSION['user_id'])): ?>
+                <a href="buy.php">Comprar Código</a>
+                <a href="chain_union.php">Unión de Cadenas</a>
                 <a href="logout.php">Logout</a>
                 <?php else: ?>
                 <a href="login.php">Login</a>
                 <a href="register.php">Registro</a>
+                <a href="#public-posts">Muro Público</a>
+                <a href="gui_documentation.html">Guía de Uso</a>
+                <a href="buy.php">Comprar Código</a>
+                <a href="chain_union.php">Unión de Cadenas</a>
                 <?php endif; ?>
             </nav>
         </header>
@@ -200,6 +207,9 @@ session_start();
     
     <div id="notification-container"></div>
     <script src="js/api.js"></script> 
+    <script>
+        const currentUserId = <?php echo json_encode($_SESSION['user_id'] ?? null); ?>;
+    </script>
     <script src="js/blog.js"></script>
 </body>
 </html>

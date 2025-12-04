@@ -1,8 +1,8 @@
 <?php
 session_start(); // Start the session
-require_once 'config.php';
-require_once '../core/Block.php';
-require_once '../core/Blockchain.php';
+require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/core/Block.php';
+require_once __DIR__ . '/core/Blockchain.php';
 
 header('Content-Type: application/json');
 

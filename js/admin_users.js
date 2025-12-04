@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
     const usersTableBody = document.getElementById('users-table-body');
     const notificationContainer = document.getElementById('notification-container');
+    const projectPriceInput = document.getElementById('project-price'); // New
+    const priceSettingForm = document.getElementById('price-setting-form'); // New
+    const savePriceBtn = document.getElementById('save-price-btn'); // New
 
     function showNotification(message, isError = false) {
         const notification = document.createElement('div');
@@ -19,6 +22,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 notification.remove();
             });
         }, 3000);
+    }
+
+    // Helper to HTML-escape strings
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.appendChild(document.createTextNode(str));
+        return div.innerHTML;
     }
 
     async function fetchUsers() {
@@ -51,10 +61,10 @@ document.addEventListener('DOMContentLoaded', function () {
             const row = document.createElement('tr');
             row.dataset.userId = user.id;
             row.innerHTML = `
-                <td data-label="ID">${user.id}</td>
-                <td data-label="Username">${user.username}</td>
-                <td data-label="Email">${user.email}</td>
-                <td data-label="Phone">${user.phone}</td>
+                <td data-label="ID">${escapeHtml(String(user.id))}</td>
+                <td data-label="Username">${escapeHtml(user.username)}</td>
+                <td data-label="Email">${escapeHtml(user.email)}</td>
+                <td data-label="Phone">${escapeHtml(user.phone)}</td>
                 <td data-label="Email Verified">
                     <input type="checkbox" class="verification-checkbox" data-type="email" ${user.email_verified ? 'checked' : ''}>
                 </td>
@@ -103,7 +113,55 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Initial fetch of users
+    // --- Project Price Management ---
+    async function fetchProjectPrice() {
+        if (!projectPriceInput) return; // Ensure element exists
+        try {
+            const response = await fetch('api/settings.php');
+            const result = await response.json();
+            if (result.status === 'success') {
+                projectPriceInput.value = result.project_price;
+            } else {
+                showNotification(`Error cargando precio: ${result.message}`, true);
+            }
+        } catch (error) {
+            console.error('Error fetching project price:', error);
+            showNotification('Error de red al cargar el precio del proyecto.', true);
+        }
+    }
+
+    if (priceSettingForm) {
+        priceSettingForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const newPrice = projectPriceInput.value;
+
+            if (!newPrice || isNaN(newPrice) || newPrice < 0) {
+                showNotification('Formato de precio inválido. Debe ser un número no negativo.', true);
+                return;
+            }
+
+            try {
+                const response = await fetch('api/settings.php', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ project_price: newPrice })
+                });
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    showNotification(result.message);
+                } else {
+                    showNotification(`Error actualizando precio: ${result.message}`, true);
+                }
+            } catch (error) {
+                console.error('Error updating project price:', error);
+                showNotification('Error de red al actualizar el precio del proyecto.', true);
+            }
+        });
+    }
+
+    // Initial fetches
     fetchUsers();
+    fetchProjectPrice();
 });
 

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Pruebas del Sistema Blockchain PHP</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; background-color: #f4f4f4; color: #333; }
+        h1, h2, h3 { color: #0056b3; }
+        code { background-color: #e2e2e2; padding: 2px 4px; border-radius: 4px; }
+        pre { background-color: #e2e2e2; padding: 10px; border-radius: 4px; overflow-x: auto; }
+        .section { background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .feature-list { list-style-type: decimal; margin-left: 20px; }
+        .feature-list li { margin-bottom: 10px; }
+        .step-list { list-style-type: disc; margin-left: 20px; }
+        .step-list li { margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <div class="section">
+        <h1>Guía de Pruebas para el Sistema Blockchain PHP</h1>
+        <p>Este documento proporciona una guía exhaustiva para testear todas las funcionalidades del sistema Blockchain PHP. Sigue estos pasos para asegurar la estabilidad y el correcto funcionamiento de la aplicación.</p>
+    </div>
+
+    <div class="section">
+        <h2>1. Configuración del Entorno de Pruebas</h2>
+        <h3>1.1 Requisitos Previos</h3>
+        <ul>
+            <li>Servidor Web (Apache/Nginx con PHP 7.4+ y MySQL/MariaDB).</li>
+            <li>Composer (para gestionar dependencias PHP).</li>
+            <li>Un navegador web moderno (Chrome, Firefox, Edge).</li>
+            <li>Herramienta de desarrollo de API (Postman, Insomnia o cURL).</li>
+        </ul>
+
+        <h3>1.2 Configuración Inicial</h3>
+        <ol class="step-list">
+            <li>Asegúrate de que la base de datos esté configurada y el archivo `database.sql` haya sido importado. Verifica las configuraciones de conexión en los archivos `config.php` de los módulos (ej. `api/config.php`, `modules/auth_user_management/config.php`).</li>
+            <li>Ejecuta `composer install` en el directorio raíz del proyecto para instalar las dependencias de PHP.</li>
+            <li>Asegúrate de que el servidor web esté configurado para servir el proyecto correctamente y que las rutas reescriban a `index.php` si es necesario (para URLs amigables).</li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <h2>2. Características a Testear</h2>
+        <ol class="feature-list">
+            <li>
+                <h3>Autenticación y Gestión de Usuarios</h3>
+                <p>Verificar el flujo completo de usuarios, desde el registro hasta la administración.</p>
+                <ul class="step-list">
+                    <li>**Registro de Usuario (`register.php`, `api/register.php`):**
+                        <ul>
+                            <li>Registrar un nuevo usuario con datos válidos.</li>
+                            <li>Intentar registrar con datos inválidos (ej. email ya registrado, contraseñas no coincidentes, campos vacíos).</li>
+                            <li>Verificar que el usuario se guarda correctamente en la base de datos.</li>
+                        </ul>
+                    </li>
+                    <li>**Inicio de Sesión (`login.php`, `api/login.php`):**
+                        <ul>
+                            <li>Iniciar sesión con credenciales válidas.</li>
+                            <li>Intentar iniciar sesión con credenciales inválidas.</li>
+                            <li>Verificar que el usuario es redirigido correctamente tras un inicio de sesión exitoso.</li>
+                        </ul>
+                    </li>
+                    <li>**Perfil de Usuario (`profile.php`, `api/profile.php`):**
+                        <ul>
+                            <li>Acceder al perfil del usuario autenticado.</li>
+                            <li>Actualizar la información del perfil (nombre, email, contraseña).</li>
+                            <li>Verificar que los cambios se reflejan en la base de datos y en la interfaz.</li>
+                        </ul>
+                    </li>
+                    <li>**Cierre de Sesión (`logout.php`):**
+                        <ul>
+                            <li>Cerrar la sesión de un usuario.</li>
+                            <li>Verificar que el usuario ya no está autenticado.</li>
+                        </ul>
+                    </li>
+                    <li>**Administración de Usuarios (si aplica, `admin_users.php`, `api/admin_users.php`):**
+                        <ul>
+                            <li>Listar usuarios.</li>
+                            <li>Editar y eliminar usuarios (solo para roles con permisos).</li>
+                            <li>Verificar que los cambios se persisten en la base de datos.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h3>Funcionalidad Blockchain</h3>
+                <p>Probar la creación y verificación de bloques en la cadena.</p>
+                <ul class="step-list">
+                    <li>**Minería de Bloques (`chain_union.php`, `api/mine_block.php`):**
+                        <ul>
+                            <li>Ejecutar la minería de un nuevo bloque.</li>
+                            <li>Verificar que el nuevo bloque se agrega a la cadena (consultando `api/get_chain.php`).</li>
+                            <li>Asegurarse de que el hash del bloque anterior y el actual sean correctos.</li>
+                            <li>Añadir transacciones (datos) a un bloque y verificar que se almacenen correctamente.</li>
+                        </ul>
+                    </li>
+                    <li>**Obtener la Cadena (`api/get_chain.php`):**
+                        <ul>
+                            <li>Acceder al endpoint para obtener la cadena completa.</li>
+                            <li>Verificar la estructura de los bloques (índice, timestamp, datos, hash anterior, hash actual, nonce).</li>
+                            <li>Asegurar que la cadena se muestra en el orden correcto.</li>
+                        </ul>
+                    </li>
+                    <li>**Validación de la Cadena (implícito en la lógica):**
+                        <ul>
+                            <li>Si existe una función de validación de cadena, ejecutarla para asegurar la integridad.</li>
+                            <li>Intentar alterar un bloque manualmente en la base de datos y verificar que la validación falle.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h3>Funcionalidad de Blog</h3>
+                <p>Verificar la creación, lectura, actualización y eliminación (CRUD) de publicaciones.</p>
+                <ul class="step-list">
+                    <li>**Crear Publicación (`blog.php`, `api/posts.php`):**
+                        <ul>
+                            <li>Crear una nueva publicación (título, contenido, autor).</li>
+                            <li>Verificar que la publicación aparece en la lista de blogs.</li>
+                        </ul>
+                    </li>
+                    <li>**Leer Publicación (`blog.php`, `api/posts.php`):**
+                        <ul>
+                            <li>Visualizar publicaciones individuales.</li>
+                            <li>Verificar que el contenido y los metadatos son correctos.</li>
+                        </ul>
+                    </li>
+                    <li>**Actualizar Publicación (`blog.php`, `api/posts.php`):**
+                        <ul>
+                            <li>Editar una publicación existente.</li>
+                            <li>Verificar que los cambios se reflejan en la vista y en la base de datos.</li>
+                        </ul>
+                    </li>
+                    <li>**Eliminar Publicación (`blog.php`, `api/posts.php`):
+                        <ul>
+                            <li>Eliminar una publicación.</li>
+                            <li>Verificar que ya no aparece en la lista.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h3>Mensajería</h3>
+                <p>Probar el envío y recepción de mensajes.</p>
+                <ul class="step-list">
+                    <li>**Enviar Mensaje (`messages.php`, `api/messages.php`):**
+                        <ul>
+                            <li>Enviar un mensaje a otro usuario (si existe la funcionalidad).</li>
+                            <li>Enviar un mensaje a uno mismo.</li>
+                        </ul>
+                    </li>
+                    <li>**Recibir/Ver Mensajes (`messages.php`, `api/messages.php`):**
+                        <ul>
+                            <li>Ver la bandeja de entrada de mensajes.</li>
+                            <li>Verificar que los mensajes se muestran correctamente.</li>
+                        </ul>
+                    </li>
+                    <li>**Responder/Eliminar Mensaje (si aplica):**
+                        <ul>
+                            <li>Probar la respuesta y eliminación de mensajes.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h3>API Endpoints Generales</h3>
+                <p>Verificar la respuesta de los endpoints principales a través de Postman, Insomnia o cURL.</p>
+                <ul class="step-list">
+                    <li>**`api/todo.php`:**
+                        <ul>
+                            <li>Probar CRUD para tareas pendientes.</li>
+                        </ul>
+                    </li>
+                    <li>**`api/settings.php`:**
+                        <ul>
+                            <li>Verificar la recuperación y actualización de configuraciones (si implementado).</li>
+                        </ul>
+                    </li>
+                    <li>**`api/videos.php`, `api/video_notes.php`, `api/youtube_converter.php` (si aplican):**
+                        <ul>
+                            <li>Probar las funcionalidades relacionadas con videos y notas.</li>
+                        </ul>
+                    </li>
+                    <li>**Manejo de Errores:**
+                        <ul>
+                            <li>Probar el envío de solicitudes incorrectas a los endpoints de la API y verificar que se devuelvan códigos de estado HTTP apropiados (400, 401, 404, 500) y mensajes de error útiles.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h3>Dashboard (`dashboard.php`)</h3>
+                <p>Verificar que todas las métricas, enlaces y funcionalidades del panel de control se muestren y funcionen correctamente.</p>
+                <ul class="step-list">
+                    <li>Acceder al dashboard como usuario autenticado.</li>
+                    <li>Verificar la carga de datos (ej. número de usuarios, bloques minados, publicaciones, etc.).</li>
+                    <li>Probar la navegación a otras secciones desde el dashboard.</li>
+                </ul>
+            </li>
+            <li>
+                <h3>Páginas Estáticas y Otras (`cv.html`, `sales_page.html`)</h3>
+                <p>Asegurarse de que las páginas estáticas se visualicen correctamente.</p>
+                <ul class="step-list">
+                    <li>Abrir las páginas en el navegador y verificar el formato y contenido.</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <h2>3. Consideraciones Adicionales</h2>
+        <ul class="step-list">
+            <li>**Pruebas de Seguridad:**
+                <ul>
+                    <li>Intentar inyección SQL, XSS, CSRF (si aplica a la implementación).</li>
+                    <li>Verificar que las sesiones se gestionen de forma segura.</li>
+                </ul>
+            </li>
+            <li>**Pruebas de Rendimiento:**
+                <ul>
+                    <li>Evaluar el tiempo de respuesta de las APIs y el renderizado de las páginas bajo carga (si es necesario).</li>
+                </ul>
+            </li>
+            <li>**Compatibilidad de Navegadores:**
+                <ul>
+                    <li>Probar en diferentes navegadores web.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <p>Al completar estas pruebas, el sistema debería ser estable y funcional. Reporta cualquier problema encontrado.</p>
+    </div>
+</body>
+</html>

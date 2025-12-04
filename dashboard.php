@@ -55,6 +55,7 @@ require_once 'api/config.php'; // Include config to get PDO object
             text-decoration: underline;
         }
     </style>
+    <link rel="icon" href="/favicon.png" type="image/png">
 </head>
 <body>
     <div class="dashboard-container">
@@ -65,10 +66,14 @@ require_once 'api/config.php'; // Include config to get PDO object
                 <a href="#youtube-gallery">YouTube Gallery</a>
                 <a href="#todo-list">To-Do List</a>
                 <a href="blog.php">Blog</a>
+                <a href="profile.php">Profile</a>
+                <a href="messages.php">Messages</a>
                 <?php if ($is_admin): ?>
                 <a href="admin_users.php">Manage Users</a>
                 <?php endif; ?>
                 <a href="gui_documentation.html">Guía de Uso</a>
+                <a href="buy.php">Comprar Código</a>
+                <a href="chain_union.php">Unión de Cadenas</a>
                 <a href="#" id="toggle-notes-panel-btn">Notas de Video</a>
                 <a href="logout.php">Logout</a>
             </nav>

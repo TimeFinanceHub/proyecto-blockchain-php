@@ -9,6 +9,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const savePostBtn = document.getElementById('save-post-btn');
     const notificationContainer = document.getElementById('notification-container');
 
+    // Helper to HTML-escape strings
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.appendChild(document.createTextNode(str));
+        return div.innerHTML;
+    }
+
     // Helper to show notifications (reused from dashboard.js pattern)
     function showNotification(message, isError = false) {
         const notification = document.createElement('div');
@@ -62,10 +69,10 @@ document.addEventListener('DOMContentLoaded', function() {
             postElement.className = 'post';
             postElement.dataset.postId = post.id;
             postElement.innerHTML = `
-                <h3 class="post-title">${post.title} ${post.is_public == 0 ? '(Privado)' : ''}</h3>
-                <p class="post-author">Por: ${post.username} | <small>${new Date(post.created_at).toLocaleString()}</small></p>
-                <div class="post-content">${post.content}</div>
-                ${post.user_id == '<?php echo $_SESSION['user_id'] ?? 'null'; ?>' ? `
+                <h3 class="post-title">${escapeHtml(post.title)} ${post.is_public == 0 ? '(Privado)' : ''}</h3>
+                <p class="post-author">Por: ${escapeHtml(post.username)} | <small>${new Date(post.created_at).toLocaleString()}</small></p>
+                <div class="post-content">${escapeHtml(post.content)}</div>
+                ${post.user_id == currentUserId ? `
                 <div class="post-actions">
                     <button class="edit-post-btn">Editar</button>
                     <button class="delete-post-btn">Eliminar</button>
@@ -73,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             targetList.appendChild(postElement);
 
-            if (post.user_id == '<?php echo $_SESSION['user_id'] ?? 'null'; ?>') {
+            if (post.user_id == currentUserId) {
                 postElement.querySelector('.edit-post-btn')?.addEventListener('click', () => editPost(post));
                 postElement.querySelector('.delete-post-btn')?.addEventListener('click', () => deletePost(post.id));
             }
@@ -118,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Refresh posts
                     fetchPosts('public');
                     // Check if user is logged in before fetching private posts
-                    if ('<?php echo $_SESSION['user_id'] ?? 'null'; ?>' !== 'null') {
+                    if (currentUserId !== null) {
                         fetchPosts('private');
                     }
                 } else {
@@ -153,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     showNotification(result.message);
                     // Refresh posts
                     fetchPosts('public');
-                    if ('<?php echo $_SESSION['user_id'] ?? 'null'; ?>' !== 'null') {
+                    if (currentUserId !== null) {
                         fetchPosts('private');
                     }
                 } else {
@@ -169,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- Initial Load ---
     fetchPosts('public');
     // Check if user is logged in before fetching private posts
-    if ('<?php echo $_SESSION['user_id'] ?? 'null'; ?>' !== 'null') {
+    if (currentUserId !== null) {
         fetchPosts('private');
     }
 });

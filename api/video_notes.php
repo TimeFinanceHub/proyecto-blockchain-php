@@ -28,8 +28,8 @@ try {
             $data = json_decode(file_get_contents('php://input'), true);
             $video_url = $data['video_url'] ?? null;
             $timestamp_in_video = $data['timestamp_in_video'] ?? null;
-            $title = $data['title'] ?? '';
-            $content = $data['content'] ?? '';
+            $title = htmlspecialchars($data['title'] ?? '', ENT_QUOTES, 'UTF-8'); // Sanitize
+            $content = htmlspecialchars($data['content'] ?? '', ENT_QUOTES, 'UTF-8'); // Sanitize
 
             if (empty($title) || empty($content)) {
                 $response['message'] = 'Title and content are required.';
@@ -67,8 +67,8 @@ try {
             $id = $data['id'] ?? null;
             $video_url = $data['video_url'] ?? null;
             $timestamp_in_video = $data['timestamp_in_video'] ?? null;
-            $title = $data['title'] ?? '';
-            $content = $data['content'] ?? '';
+            $title = htmlspecialchars($data['title'] ?? '', ENT_QUOTES, 'UTF-8'); // Sanitize
+            $content = htmlspecialchars($data['content'] ?? '', ENT_QUOTES, 'UTF-8'); // Sanitize
 
             if (!$id || empty($title) || empty($content)) {
                 $response['message'] = 'ID, title, and content are required for update.';

@@ -125,6 +125,7 @@ try {
             }
         }
     </style>
+    <link rel="icon" href="/favicon.png" type="image/png">
 </head>
 <body>
     <div class="dashboard-container">
@@ -132,10 +133,8 @@ try {
             <h1>Manage Users</h1>
             <nav>
                 <a href="dashboard.php">Dashboard</a>
-                <a href="admin_users.php">Manage Users</a>
-                <a href="blog.php">Blog</a>
-                <a href="gui_documentation.html">Guía de Uso</a>
-                <a href="#" id="toggle-notes-panel-btn">Notas de Video</a>
+                <a href="buy.php">Comprar Código</a>
+                <a href="chain_union.php">Unión de Cadenas</a>
                 <a href="logout.php">Logout</a>
             </nav>
         </header>
@@ -165,42 +164,20 @@ try {
                     </table>
                 </div>
             </section>
+
+            <section id="site-settings">
+                <h2>Site Settings</h2>
+                <form id="price-setting-form" class="profile-form"> <!-- Reusing profile-form styling -->
+                    <div class="form-group">
+                        <label for="project-price">Project Price (USD)</label>
+                        <input type="number" id="project-price" name="project_price" step="0.01" min="0" required>
+                    </div>
+                    <button type="submit" id="save-price-btn">Save Price</button>
+                </form>
+            </section>
         </main>
     </div>
 
-    <!-- Video Notes Panel -->
-    <div id="video-notes-panel" class="video-notes-panel">
-        <div class="panel-header">
-            <h3>Mis Notas de Video</h3>
-            <button id="close-notes-panel-btn" class="close-btn">&times;</button>
-        </div>
-        <div class="panel-body">
-            <form id="video-note-form">
-                <input type="hidden" id="note-id" value="">
-                <div class="form-group">
-                    <label for="note-video-url">URL del Video (Opcional)</label>
-                    <input type="text" id="note-video-url" placeholder="URL de YouTube">
-                </div>
-                 <div class="form-group">
-                    <label for="note-timestamp">Marca de tiempo (segundos - Opcional)</label>
-                    <input type="number" id="note-timestamp" placeholder="Ej. 120 (para 2:00)">
-                </div>
-                <div class="form-group">
-                    <label for="note-title">Título de la Nota</label>
-                    <input type="text" id="note-title" required>
-                </div>
-                <div class="form-group">
-                    <label for="note-content">Contenido de la Nota</label>
-                    <textarea id="note-content" rows="5" required></textarea>
-                </div>
-                <button type="submit" id="save-note-btn">Guardar Nota</button>
-            </form>
-            <h4>Notas Guardadas:</h4>
-            <ul id="notes-list">
-                <p class="no-notes-message">No hay notas guardadas aún.</p>
-            </ul>
-        </div>
-    </div>
     
     <div id="notification-container"></div>
     <script src="js/api.js"></script> <!-- Assuming some common API utility, adjust if not present -->
