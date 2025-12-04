@@ -13,6 +13,27 @@ Este proyecto es una aplicación web robusta desarrollada en PHP que integra fun
 *   **Interfaz de Usuario (Frontend):** Desarrollada con HTML, CSS y JavaScript, ofreciendo una experiencia de usuario dinámica.
 *   **Base de Datos:** Gestión de datos a través de MySQL/MariaDB.
 
+## Alcance del Proyecto
+
+Este proyecto busca establecer una aplicación web fundamental con capacidades de blockchain integradas. Se enfoca en demostrar funcionalidades básicas como la gestión de usuarios, un sistema de blog sencillo, mensajería básica y las operaciones fundamentales de una blockchain (creación de bloques, recuperación de la cadena). La capa API permite la interacción programática con estas características.
+
+### Dentro del Alcance (In-Scope):
+*   Autenticación de usuarios (registro, inicio de sesión, gestión de perfiles).
+*   Operaciones CRUD básicas para publicaciones de blog.
+*   Operaciones fundamentales de blockchain (minería, visualización de la cadena).
+*   API RESTful para las funcionalidades principales.
+*   Arquitectura modular para las funcionalidades clave.
+*   Frontend básico para la interacción del usuario.
+
+### Fuera del Alcance (Out-of-Scope) para esta versión inicial:
+*   Funciones avanzadas de blockchain (ej. contratos inteligentes, mecanismos de consenso complejos, redes P2P).
+*   Auditorías de seguridad de alto nivel más allá de las buenas prácticas básicas.
+*   Escalabilidad para entornos de producción de alto tráfico.
+*   Notificaciones en tiempo real.
+*   Gestión compleja de autorizaciones/roles (más allá de administrador/usuario básico).
+*   Pasarelas de pago o funcionalidades de comercio electrónico.
+*   Frameworks de pruebas automatizadas (pruebas unitarias, de integración - aunque se proporciona una guía de pruebas manuales).
+
 ## Estructura del Proyecto
 
 ```
