@@ -1,5 +1,5 @@
 {
-    "name": "your-vendor-name/php-blockchain-project",
+    "name": "syntaxsanctuary/php-blockchain-project",
     "description": "A PHP-based web application with blockchain functionalities, user management, and API endpoints.",
     "type": "project",
     "license": "proprietary",
