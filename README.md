@@ -280,7 +280,7 @@ Al utilizar, modificar o distribuir este proyecto, usted acepta los siguientes t
 3.  **Monetización y Participación en Ganancias:** Si este proyecto (o cualquier derivación, adaptación o software que incorpore sustancialmente este proyecto) es utilizado con fines comerciales o monetizado de alguna forma, se requerirá un porcentaje del [**especificar porcentaje, ej. 10%**] de las ganancias brutas obtenidas de dicha monetización. Este porcentaje debe ser negociado y acordado formalmente con **Ramiro G Glez.**] antes de la monetización.
 4.  **Publicación de Modificaciones:** Cualquier modificación, mejora o adaptación realizada sobre este proyecto debe ser publicada y puesta a disposición del autor original (**Ramiro G Glez.**]) de forma transparente y accesible. Esto incluye la publicación del código fuente de las modificaciones, idealmente mediante un pull request o un repositorio público enlazado. El autor original se reserva el derecho de integrar o rechazar dichas modificaciones en el proyecto principal.
 
-Para cualquier consulta, propuesta de colaboración o solicitud de licencia comercial personalizada, por favor, contacta a [**ramiro.glez@example.com**].
+Para cualquier consulta, propuesta de colaboración o solicitud de licencia comercial personalizada, por favor, contacta a [**mostlyphpsoftware@gmail.com**].
 
 ---
 
