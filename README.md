@@ -119,9 +119,48 @@ Este proyecto busca establecer una aplicación web fundamental con capacidades d
 └── templates/
 ```
 
-## Guía de Instalación y Configuración Paso a Paso
+## Guía de Instalación
 
-Sigue estos pasos para poner en marcha el proyecto desde cero en tu entorno local.
+### Método Recomendado (Usando Composer)
+
+Esta es la forma más sencilla de instalar el proyecto, ya que Composer se encargará de descargar el proyecto y sus dependencias automáticamente.
+
+1.  **Ejecutar Composer:**
+    Abre tu terminal y ejecuta el siguiente comando. Reemplaza `nombre-del-directorio` con el nombre que deseas para la carpeta de tu proyecto.
+
+    ```bash
+    composer create-project syntaxsanctuary/php-blockchain-project nombre-del-directorio
+    ```
+
+2.  **Navegar al Directorio:**
+    Una vez que la instalación esté completa, muévete al nuevo directorio:
+    ```bash
+    cd nombre-del-directorio
+    ```
+
+### Método Alternativo (Clonación Manual con Git)
+
+Sigue estos pasos si prefieres clonar el repositorio manualmente.
+
+1.  **Clonar el Repositorio:**
+    Abre tu terminal y ejecuta el siguiente comando:
+
+    ```bash
+    git clone https://github.com/syntaxsanctuary/php-blockchain-project.git
+    cd php-blockchain-project
+    ```
+    *(Nota: Reemplaza la URL si tienes un fork personal).*
+
+2.  **Instalar Dependencias de PHP:**
+    Desde el directorio raíz del proyecto, ejecuta Composer:
+
+    ```bash
+    composer install
+    ```
+
+## Configuración Post-Instalación (Para ambos métodos)
+
+Después de instalar el proyecto usando cualquiera de los métodos anteriores, sigue estos pasos para configurar tu entorno.
 
 ### 1. Requisitos Previos
 
@@ -131,18 +170,9 @@ Asegúrate de tener instalado lo siguiente:
 *   **PHP:** Versión 7.4 o superior (con extensiones como `mysqli`, `json`, `curl` habilitadas).
 *   **Base de Datos:** MySQL o MariaDB.
 *   **Composer:** Gestor de dependencias para PHP.
-*   **Git:** Para clonar el repositorio.
+*   **Git:** (Necesario para el método de clonación manual).
 
-### 2. Clonar el Repositorio
-
-Abre tu terminal y ejecuta el siguiente comando:
-
-```bash
-git clone [URL_DEL_REPOSITORIO]
-cd proyecto_blockchain_php
-```
-
-### 3. Configuración de la Base de Datos
+### 2. Configuración de la Base de Datos
 
 1.  **Crear la Base de Datos:**
     Accede a tu gestor de bases de datos (phpMyAdmin, MySQL Workbench, o la línea de comandos) y crea una nueva base de datos. Por ejemplo:
@@ -185,18 +215,10 @@ cd proyecto_blockchain_php
     ```
     Asegúrate de replicar esta configuración en todos los `config.php` relevantes.
 
-### 4. Instalar Dependencias de PHP
-
-Desde el directorio raíz del proyecto, ejecuta Composer:
-
-```bash
-composer install
-```
-
-### 5. Configuración del Servidor Web
+### 3. Configuración del Servidor Web
 
 *   **Para Apache:**
-    Asegúrate de que `mod_rewrite` esté habilitado y configura un Virtual Host para apuntar la raíz del documento al directorio `proyecto_blockchain_php/`. Un ejemplo básico de configuración de `.htaccess` (si no tienes un Virtual Host más complejo) podría ser:
+    Asegúrate de que `mod_rewrite` esté habilitado y configura un Virtual Host para apuntar la raíz del documento al directorio del proyecto. Un ejemplo básico de configuración de `.htaccess` (si no tienes un Virtual Host más complejo) podría ser:
 
     ```apache
     # .htaccess en el directorio raíz del proyecto
@@ -213,7 +235,7 @@ composer install
     server {
         listen 80;
         server_name your_domain_or_ip;
-        root /path/to/your/proyecto_blockchain_php;
+        root /path/to/your/project_directory;
         index index.php index.html index.htm;
 
         location / {
@@ -232,11 +254,11 @@ composer install
         }
     }
     ```
-    *(Reemplaza `/path/to/your/proyecto_blockchain_php` con la ruta absoluta a tu proyecto y `php7.4-fpm.sock` con la versión correcta de PHP-FPM).*
+    *(Reemplaza `/path/to/your/project_directory` con la ruta absoluta a tu proyecto y `php7.4-fpm.sock` con la versión correcta de PHP-FPM).*
 
-### 6. Acceder a la Aplicación
+### 4. Acceder a la Aplicación
 
-Una vez configurado el servidor web, abre tu navegador y navega a la URL donde está alojado el proyecto (ej. `http://localhost/proyecto_blockchain_php/` o `http://your_domain_or_ip/`).
+Una vez configurado el servidor web, abre tu navegador y navega a la URL donde está alojado el proyecto (ej. `http://localhost/nombre-del-directorio/` o `http://your_domain_or_ip/`).
 
 ## Uso de la Aplicación
 
